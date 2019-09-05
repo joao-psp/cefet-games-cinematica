@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package br.cefetmg.games.movement.behavior;
 
 import br.cefetmg.games.movement.AlgoritmoMovimentacao;
@@ -7,19 +12,18 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector3;
 
 /**
- * Guia o agente na direção do alvo.
  *
- * @author Flávio Coutinho <fegemo@cefetmg.br>
+ * @author aluno
  */
-public class Buscar extends AlgoritmoMovimentacao {
+public class Chegar extends AlgoritmoMovimentacao {
 
-    private static final char NOME = 's';
+    private static final char NOME = 'a';
 
-    public Buscar(float maxVelocidade) {
+    public Chegar(float maxVelocidade) {
         this(NOME, maxVelocidade);
     }
 
-    protected Buscar(char nome, float maxVelocidade) {
+    protected Chegar(char nome, float maxVelocidade) {
         super(nome);
         this.maxVelocidade = maxVelocidade;
     }
@@ -32,7 +36,18 @@ public class Buscar extends AlgoritmoMovimentacao {
         
         Vector3 velocity = new Vector3(objetivo.x - agente.posicao.x,
                             objetivo.y - agente.posicao.y,
-                            objetivo.z - agente.posicao.z).nor().scl(maxVelocidade);
+                            objetivo.z - agente.posicao.z);
+        
+        if (velocity.len() < 0) {
+            output.velocidade = new Vector3(0,0,0);
+            return output;
+        }
+        
+        velocity.scl((float) 0.8);
+        
+        if (velocity.len() > maxVelocidade) {
+            velocity.nor().scl(maxVelocidade);
+        }
         
         output.velocidade = velocity;
         agente.olharNaDirecaoDaVelocidade(velocity);
@@ -48,6 +63,7 @@ public class Buscar extends AlgoritmoMovimentacao {
 
     @Override
     public int getTeclaParaAtivacao() {
-        return Keys.S;
+        return Keys.A;
     }
+    
 }
